@@ -19,7 +19,7 @@ USE zen_class;
 -- users
 CREATE TABLE IF NOT EXISTS users (
     id INT NOT NULL AUTO_INCREMENT,
-    user_name VARCHAR(30),
+    user_name VARCHAR(30) NOT NULL,
     user_first_name  VARCHAR(30) DEFAULT NULL,
     user_last_name  VARCHAR(30) DEFAULT NULL,
     email VARCHAR(50) NOT NULL,
@@ -32,18 +32,18 @@ CREATE TABLE IF NOT EXISTS users (
 -- codekata
 CREATE TABLE IF NOT EXISTS codekata (
 	id INT NOT NULL AUTO_INCREMENT,
-    problem_title VARCHAR(50),
-    category VARCHAR(50),
-    problem_statement VARCHAR(255),
-    test_case VARCHAR(255),
+    problem_title VARCHAR(50) NOT NULL,
+    category VARCHAR(50) NOT NULL,
+    problem_statement VARCHAR(255) NOT NULL,
+    test_case VARCHAR(255) NOT NULL,
     PRIMARY KEY(id)
 )ENGINE=INNODB;
 
 CREATE TABLE IF NOT EXISTS students_solved_problems (
 	id INT NOT NULL AUTO_INCREMENT,
-	problem_id INT, 
-	student_id INT,
-    student_solution VARCHAR(500),
+	problem_id INT NOT NULL, 
+	student_id INT NOT NULL,
+    student_solution VARCHAR(500) DEFAULT NULL,
     PRIMARY KEY(id),
     FOREIGN KEY(problem_id) REFERENCES codekata (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY(student_id) REFERENCES users (id) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -52,11 +52,11 @@ CREATE TABLE IF NOT EXISTS students_solved_problems (
 -- topics
 CREATE TABLE IF NOT EXISTS topics (
 	id INT NOT NULL AUTO_INCREMENT,
-	topic_title VARCHAR(50),
-	category VARCHAR(50),
-    topic_content VARCHAR(255),
-    pre_req VARCHAR(255),
-    pre_read VARCHAR(255),
+	topic_title VARCHAR(50) NOT NULL,
+	category VARCHAR(50) NOT NULL,
+    topic_content VARCHAR(255) NOT NULL,
+    pre_req VARCHAR(255) NOT NULL,
+    pre_read VARCHAR(255) NOT NULL,
     PRIMARY KEY(id)
 )ENGINE=INNODB;
 
@@ -64,15 +64,15 @@ CREATE TABLE IF NOT EXISTS topics (
 CREATE TABLE IF NOT EXISTS tasks (
 	id INT NOT NULL AUTO_INCREMENT,
 	topic_id INT NOT NULL,
-    task_title VARCHAR(255),
-    task_desc VARCHAR(255),
+    task_title VARCHAR(255) NOT NULL,
+    task_desc VARCHAR(255) NOT NULL,
     PRIMARY KEY(id),
     FOREIGN KEY(topic_id) REFERENCES topics (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 )ENGINE=INNODB;
 
 CREATE TABLE IF NOT EXISTS students_completed_task (
-	task_id INT,
-	student_id INT,
+	task_id INT NOT NULL,
+	student_id INT NOT NULL,
     FOREIGN KEY(task_id) REFERENCES tasks (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY(student_id) REFERENCES users (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 )ENGINE=INNODB;
@@ -80,20 +80,20 @@ CREATE TABLE IF NOT EXISTS students_completed_task (
 -- company_drives
 CREATE TABLE IF NOT EXISTS company_drives (
 	id INT NOT NULL AUTO_INCREMENT,
-    company_name VARCHAR(255),
-    role_desc VARCHAR(500),
-    qualification_desc VARCHAR(500),
-    exprience VARCHAR(50),
-    ctc VARCHAR(50),
-    drive_venue  VARCHAR(255),
-    drive_date DATE,
+    company_name VARCHAR(255) NOT NULL,
+    role_desc VARCHAR(500) NOT NULL,
+    qualification_desc VARCHAR(500) NOT NULL,
+    exprience VARCHAR(50) NOT NULL,
+    ctc VARCHAR(50) NOT NULL,
+    drive_venue  VARCHAR(255) NOT NULL,
+    drive_date DATE NOT NULL,
     PRIMARY KEY(id)
 )ENGINE=INNODB;
 
 
 CREATE TABLE IF NOT EXISTS students_attended_company_drives (
-	drive_id INT,
-	student_id INT,
+	drive_id INT NOT NULL,
+	student_id INT NOT NULL,
     FOREIGN KEY(drive_id) REFERENCES company_drives (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY(student_id) REFERENCES users (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 )ENGINE=INNODB;
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS students_attended_company_drives (
 -- mentors
 CREATE TABLE IF NOT EXISTS mentors (
     id INT NOT NULL AUTO_INCREMENT,
-    mentor_name VARCHAR(30),
+    mentor_name VARCHAR(30) NOT NULL,
     mentor_first_name  VARCHAR(30) DEFAULT NULL,
     mentor_last_name  VARCHAR(30) DEFAULT NULL,
     email VARCHAR(50) NOT NULL,
@@ -113,8 +113,8 @@ CREATE TABLE IF NOT EXISTS mentors (
 )ENGINE=INNODB;
 
 CREATE TABLE IF NOT EXISTS students_assigned_mentor (
-	mentor_id INT,
-	student_id INT, 
+	mentor_id INT NOT NULL,
+	student_id INT NOT NULL, 
     FOREIGN KEY(mentor_id) REFERENCES mentors (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY(student_id) REFERENCES users (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 )ENGINE=INNODB;
@@ -122,20 +122,20 @@ CREATE TABLE IF NOT EXISTS students_assigned_mentor (
 -- courses
 CREATE TABLE IF NOT EXISTS courses (
 	id INT NOT NULL AUTO_INCREMENT,
-    course_title VARCHAR(255),
-    course_desc VARCHAR(255),
-    course_duration VARCHAR(50),
-    course_duration_in_days MEDIUMINT,
+    course_title VARCHAR(255) NOT NULL,
+    course_desc VARCHAR(255) NOT NULL,
+    course_duration VARCHAR(50) NOT NULL,
+    course_duration_in_days INT NOT NULL,
     PRIMARY KEY(id)
 )ENGINE=INNODB;
 
 -- students_activated_courses
 CREATE TABLE IF NOT EXISTS students_activated_courses (
 	id INT NOT NULL AUTO_INCREMENT,
-	student_id  INT,
-	course_id  INT,
-	date_of_join DATE NOT NULL,
-    date_of_course_end DATE NOT NULL,
+	student_id  INT NOT NULL,
+	course_id  INT NOT NULL,
+	date_of_join DATE NOT NULL NOT NULL,
+    date_of_course_end DATE NOT NULL NOT NULL,
     PRIMARY KEY(id),
     FOREIGN KEY(student_id) REFERENCES users (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY(course_id) REFERENCES courses (id) ON DELETE NO ACTION ON UPDATE NO ACTION
@@ -144,9 +144,9 @@ CREATE TABLE IF NOT EXISTS students_activated_courses (
 -- attendance
 CREATE TABLE IF NOT EXISTS attendance (
 	id INT NOT NULL AUTO_INCREMENT,
-	user_id  INT,
+	user_id  INT NOT NULL,
     date_of_day DATE NOT NULL,
-    present_absent BIT,
+    present_absent BIT NOT NULL,
     PRIMARY KEY(id),
     FOREIGN KEY(user_id) REFERENCES users (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 )ENGINE=INNODB;
