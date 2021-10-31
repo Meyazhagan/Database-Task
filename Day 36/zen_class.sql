@@ -9,7 +9,7 @@
 -- students_activated_courses
 -- courses
 
---  DROP DATABASE zen_class;
+DROP DATABASE IF EXISTS zen_class;
 
 -- The following are the queries need to be executed
 CREATE DATABASE IF NOT EXISTS zen_class;
@@ -71,8 +71,10 @@ CREATE TABLE IF NOT EXISTS tasks (
 )ENGINE=INNODB;
 
 CREATE TABLE IF NOT EXISTS students_completed_task (
+    id INT NOT NULL AUTO_INCREMENT,
 	task_id INT NOT NULL,
 	student_id INT NOT NULL,
+    PRIMARY KEY(id),
     FOREIGN KEY(task_id) REFERENCES tasks (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY(student_id) REFERENCES users (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 )ENGINE=INNODB;
@@ -92,9 +94,11 @@ CREATE TABLE IF NOT EXISTS company_drives (
 
 
 CREATE TABLE IF NOT EXISTS students_attended_company_drives (
-	drive_id INT NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
+	company_drive_id INT NOT NULL,
 	student_id INT NOT NULL,
-    FOREIGN KEY(drive_id) REFERENCES company_drives (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
+    PRIMARY KEY(id),
+    FOREIGN KEY(company_drive_id) REFERENCES company_drives (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY(student_id) REFERENCES users (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 )ENGINE=INNODB;
 
@@ -113,8 +117,10 @@ CREATE TABLE IF NOT EXISTS mentors (
 )ENGINE=INNODB;
 
 CREATE TABLE IF NOT EXISTS students_assigned_mentor (
+    id INT NOT NULL AUTO_INCREMENT,
 	mentor_id INT NOT NULL,
 	student_id INT NOT NULL, 
+    PRIMARY KEY(id),
     FOREIGN KEY(mentor_id) REFERENCES mentors (id) ON DELETE NO ACTION ON UPDATE NO ACTION,
     FOREIGN KEY(student_id) REFERENCES users (id) ON DELETE NO ACTION ON UPDATE NO ACTION
 )ENGINE=INNODB;
@@ -276,7 +282,7 @@ INSERT INTO company_drives
     ("TCS", "Front end developer","B.E, B.Tech", "0-2 years", "6LPA", "Chennai", "2021-07-10"),
     ("ZOHO", "Back end developer","B.E, B.Tech", "0-2 years", "9LPA", "Chennai", "2021-06-10");
     
-INSERT INTO students_attended_company_drives (student_id, drive_id) VALUES
+INSERT INTO students_attended_company_drives (student_id, company_drive_id) VALUES
 	(1, 1),
     (1, 3),
     (1, 5),
@@ -319,14 +325,14 @@ JOIN users as r
 ON l.student_id=r.id
 GROUP BY student_id;
 
--- 4. display the no of company drives attended by a user
+-- -- 4. display the no of company drives attended by a user
 SELECT student_id, user_name , count(*) as no_of_company_drives_attended
 FROM students_attended_company_drives as s
 JOIN users as u
 ON s.student_id=u.id
 GROUP BY student_id;
 
--- 5. combine and display students_activated_courses and courses for a specific user groping them based on the course
+-- -- 5. combine and display students_activated_courses and courses for a specific user groping them based on the course
 SELECT course_id,student_id, user_name, course_title, course_desc, course_duration
 FROM students_activated_courses AS s
 JOIN users AS u
@@ -335,10 +341,10 @@ JOIN courses AS c
 ON s.course_id=c.id
 ORDER BY course_id;
 
--- 6. list all the mentors
-SELECT * FROM mentors;
+-- -- 6. list all the mentors
+ SELECT * FROM mentors;
 
--- 7. list the number of students that are assigned for a mentor
+-- -- 7. list the number of students that are assigned for a mentor
 SELECT mentor_id, mentor_name , count(*) as no_of_students_assigned
 FROM students_assigned_mentor as s
 JOIN mentors as m
