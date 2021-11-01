@@ -1,0 +1,1 @@
+mongoimport --db mongo-product-task-38 --collection product --drop --file product.json --jsonArray
