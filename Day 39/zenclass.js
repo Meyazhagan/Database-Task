@@ -360,6 +360,6 @@ db.attendance.aggregate([
     },
   },
   {
-    $count: "No_of_students_absent",
+    $count: "no_of_students_absent_and_task_not_submitted",
   },
 ]);
